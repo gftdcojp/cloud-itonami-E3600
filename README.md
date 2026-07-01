@@ -6,6 +6,14 @@ and supply.
 This repository designs a forkable OSS business for water-quality monitoring,
 small-utility operations, leak response, and public water-safety reporting.
 
+## Robotics premise
+
+All cloud-itonami verticals are designed on the premise that a **robot performs
+the physical domain work**. Here a sampling and valve robot performs water sampling, valve actuation and leak survey at treatment and distribution points under an actor that proposes
+actions and an independent **Water Safety Governor** that gates them. The governor never
+dispatches hardware itself; `:high`/`:safety-critical` actions (such as
+operating near water sources, treatment chemicals or public supply) require human sign-off.
+
 ## Core Contract
 
 ```text

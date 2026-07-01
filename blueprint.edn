@@ -5,4 +5,5 @@
  :itonami.blueprint/license "AGPL-3.0-or-later"
  :itonami.blueprint/social-impact [:public-health :resilience :infrastructure]
  :itonami.blueprint/governor :water-safety-governor
+ :itonami.blueprint/robotics true
  :itonami.blueprint/status :public-oss}
