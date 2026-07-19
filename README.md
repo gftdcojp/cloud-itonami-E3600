@@ -143,10 +143,13 @@ clojure -M:dev:test    # governor contract · phase invariants · store parity �
 clojure -M:lint        # clj-kondo (errors fail; CI mirrors this)
 ```
 
-A live sample of the operator console (robotics safety console, shared
-template) is rendered in
+A live sample of the operator console is rendered at build time by
+actually running the real actor stack (`water.render-html`, driving
+`water.operation`'s StateGraph against a seeded `water.store`) into
 [docs/samples/operator-console.html](docs/samples/operator-console.html)
--- pure-data HTML output of `kotoba.robotics.ui`.
+-- `clojure -M:dev:render-html`, regenerated nightly (and on demand) by
+[`.github/workflows/regenerate.yml`](.github/workflows/regenerate.yml),
+which commits only when the output actually changed.
 
 ## Robotics premise
 
@@ -200,6 +203,7 @@ stack only -- no bespoke domain capability lib to reference at all.
 | `src/water/phase.cljc` | **Phase 0→3** -- read-only → assisted intake → assisted assess → supervised (both report publication and alert suppression always human; site intake is the ONLY auto-eligible op, no direct capital risk) |
 | `src/water/operation.cljc` | **OperationActor** -- langgraph-clj StateGraph |
 | `src/water/sim.cljc` | demo driver |
+| `src/water/render_html.clj` | build-time renderer for `docs/samples/operator-console.html` -- drives the real actor, no invented numbers (`clojure -M:dev:render-html`) |
 | `test/water/*_test.clj` | governor contract · phase invariants · store parity · registry conformance · facts coverage |
 
 ## Business-process coverage (honest)
