@@ -33,10 +33,9 @@
   audit trail a community trusting a water utility needs, and the
   evidence an operator needs if a report or alert-suppression decision
   is later disputed."
-  (:require #?(:clj  [clojure.edn :as edn]
-               :cljs [cljs.reader :as edn])
-            [water.registry :as registry]
-            [langchain.db :as d]))
+  (:require [water.registry :as registry]
+            [langchain.db :as d]
+            [langchain-store.core :as ls]))
 
 (defprotocol Store
   (site [s id])
@@ -186,9 +185,6 @@
    :report-sequence/jurisdiction     {:db/unique :db.unique/identity}
    :suppression-sequence/jurisdiction {:db/unique :db.unique/identity}})
 
-(defn- enc [v] (pr-str v))
-(defn- dec* [s] (when s (edn/read-string s)))
-
 (defn- site->tx [{:keys [id site-name contaminant-level contaminant-min contaminant-max
                          threshold-breach-unresolved?
                          report-published? alert-suppressed?
@@ -232,25 +228,25 @@
          (map #(pull->site (d/pull (d/db conn) site-pull [:site/id %])))
          (sort-by :id)))
   (threshold-screen-of [_ id]
-    (dec* (d/q '[:find ?p . :in $ ?sid
+    (ls/dec* (d/q '[:find ?p . :in $ ?sid
                 :where [?k :threshold-screen/site-id ?sid] [?k :threshold-screen/payload ?p]]
               (d/db conn) id)))
   (assessment-of [_ site-id]
-    (dec* (d/q '[:find ?p . :in $ ?sid
+    (ls/dec* (d/q '[:find ?p . :in $ ?sid
                 :where [?a :assessment/site-id ?sid] [?a :assessment/payload ?p]]
               (d/db conn) site-id)))
   (ledger [_]
     (->> (d/q '[:find ?s ?f :where [?e :ledger/seq ?s] [?e :ledger/fact ?f]] (d/db conn))
          (sort-by first)
-         (mapv (comp dec* second))))
+         (mapv (comp ls/dec* second))))
   (report-history [_]
     (->> (d/q '[:find ?s ?r :where [?e :report/seq ?s] [?e :report/record ?r]] (d/db conn))
          (sort-by first)
-         (mapv (comp dec* second))))
+         (mapv (comp ls/dec* second))))
   (suppression-history [_]
     (->> (d/q '[:find ?s ?r :where [?e :suppression/seq ?s] [?e :suppression/record ?r]] (d/db conn))
          (sort-by first)
-         (mapv (comp dec* second))))
+         (mapv (comp ls/dec* second))))
   (next-report-sequence [_ jurisdiction]
     (or (d/q '[:find ?n . :in $ ?j
               :where [?e :report-sequence/jurisdiction ?j] [?e :report-sequence/next ?n]]
@@ -271,10 +267,10 @@
       (d/transact! conn [(site->tx value)])
 
       :assessment/set
-      (d/transact! conn [{:assessment/site-id (first path) :assessment/payload (enc payload)}])
+      (d/transact! conn [{:assessment/site-id (first path) :assessment/payload (ls/enc payload)}])
 
       :threshold-screen/set
-      (d/transact! conn [{:threshold-screen/site-id (first path) :threshold-screen/payload (enc payload)}])
+      (d/transact! conn [{:threshold-screen/site-id (first path) :threshold-screen/payload (ls/enc payload)}])
 
       :site/mark-published
       (let [site-id (first path)
@@ -284,7 +280,7 @@
         (d/transact! conn
                      [(site->tx (assoc site-patch :id site-id))
                       {:report-sequence/jurisdiction jurisdiction :report-sequence/next next-n}
-                      {:report/seq (count (report-history s)) :report/record (enc (get result "record"))}])
+                      {:report/seq (count (report-history s)) :report/record (ls/enc (get result "record"))}])
         result)
 
       :site/mark-suppressed
@@ -295,12 +291,12 @@
         (d/transact! conn
                      [(site->tx (assoc site-patch :id site-id))
                       {:suppression-sequence/jurisdiction jurisdiction :suppression-sequence/next next-n}
-                      {:suppression/seq (count (suppression-history s)) :suppression/record (enc (get result "record"))}])
+                      {:suppression/seq (count (suppression-history s)) :suppression/record (ls/enc (get result "record"))}])
         result)
       nil)
     s)
   (append-ledger! [s fact]
-    (d/transact! conn [{:ledger/seq (count (ledger s)) :ledger/fact (enc fact)}])
+    (d/transact! conn [{:ledger/seq (count (ledger s)) :ledger/fact (ls/enc fact)}])
     fact)
   (with-sites [s sites]
     (when (seq sites) (d/transact! conn (mapv site->tx (vals sites)))) s))
