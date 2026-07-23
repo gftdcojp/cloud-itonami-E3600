@@ -12,14 +12,20 @@
   (is (= "France" (:name (facts/spec-basis "FRA"))))
   (is (re-find #"Code de la santé publique" (:legal-basis (facts/spec-basis "FRA")))))
 
+(deftest nzl-has-a-spec-basis
+  (is (some? (facts/spec-basis "NZL")))
+  (is (string? (:provenance (facts/spec-basis "NZL"))))
+  (is (= "New Zealand" (:name (facts/spec-basis "NZL"))))
+  (is (re-find #"Water Services Act 2021" (:legal-basis (facts/spec-basis "NZL")))))
+
 (deftest unknown-jurisdiction-has-no-fabricated-spec-basis
   (is (nil? (facts/spec-basis "ATL"))))
 
 (deftest coverage-never-reports-a-missing-jurisdiction-as-covered
-  (let [report (facts/coverage ["JPN" "ATL" "GBR" "FRA"])]
-    (is (= 3 (:covered report)))
+  (let [report (facts/coverage ["JPN" "ATL" "GBR" "FRA" "NZL"])]
+    (is (= 4 (:covered report)))
     (is (= ["ATL"] (:missing-jurisdictions report)))
-    (is (= ["FRA" "GBR" "JPN"] (:covered-jurisdictions report)))))
+    (is (= ["FRA" "GBR" "JPN" "NZL"] (:covered-jurisdictions report)))))
 
 (deftest required-evidence-satisfied-needs-every-item
   (let [all (facts/evidence-checklist "JPN")]
@@ -32,3 +38,9 @@
     (is (= 4 (count all)))
     (is (facts/required-evidence-satisfied? "FRA" all))
     (is (not (facts/required-evidence-satisfied? "FRA" (rest all))))))
+
+(deftest nzl-required-evidence-satisfied-needs-every-item
+  (let [all (facts/evidence-checklist "NZL")]
+    (is (= 4 (count all)))
+    (is (facts/required-evidence-satisfied? "NZL" all))
+    (is (not (facts/required-evidence-satisfied? "NZL" (rest all))))))

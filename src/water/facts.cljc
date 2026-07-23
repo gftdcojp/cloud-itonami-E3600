@@ -91,7 +91,59 @@
           :required-evidence ["Enregistrement de l'installation (site-intake record)"
                               "Certificat d'étalonnage des capteurs (sensor-calibration-provenance certificate)"
                               "Chaîne de traçabilité des résultats d'analyse (lab-result-chain-of-custody record)"
-                              "Document source d'information des consommateurs (public-reporting-source document)"]}})
+                              "Document source d'information des consommateurs (public-reporting-source document)"]}
+   ;; NZL citations independently fetched+read this session (2026-07-23).
+   ;; taumataarowai.govt.nz was fetched directly and confirms: the regulator's
+   ;; site distinguishes "Drinking Water Standards" (composition/MAV limits)
+   ;; from the separate "Drinking Water Quality Assurance Rules" (monitoring/
+   ;; process), and that its "how-to-guidance/monitoring-and-reporting" page
+   ;; states "Reporting the outcomes of your monitoring to us is key to
+   ;; ensuring that monitoring and treatment systems, processes and equipment
+   ;; are working effectively" -- the same monitoring+reporting angle this
+   ;; catalog's other entries cite. legislation.govt.nz returned an AWS WAF
+   ;; bot-detection challenge on every direct fetch attempt (HTTP 202,
+   ;; `x-amzn-waf-action: challenge` header, confirmed via a plain HTTP
+   ;; HEAD/GET, no automated bypass attempted per this fleet's hard safety
+   ;; rule); the Act and Regulations text below was instead independently
+   ;; fetched and read via the Internet Archive Wayback Machine snapshots
+   ;; https://web.archive.org/web/20251119005830/https://legislation.govt.nz/act/public/2021/0036/latest/whole.html
+   ;; (Water Services Act 2021) and
+   ;; https://web.archive.org/web/20251221120557/https://www.legislation.govt.nz/regulation/public/2022/0168/latest/whole.html
+   ;; (Water Services (Drinking Water Standards for New Zealand) Regulations
+   ;; 2022). Verbatim confirmed: reg title "Water Services (Drinking Water
+   ;; Standards for New Zealand) Regulations 2022" (SL 2022/168), made under
+   ;; s 47 of the Water Services Act 2021, in force 14 November 2022, whose
+   ;; Schedule sets e.g. "Escherichia coli / Less than 1 in 100 mL of
+   ;; sample"; its Explanatory note states the standards "revoke and replace
+   ;; the Drinking-water Standards for New Zealand 2005 (revised 2018)". Act
+   ;; s 22(1)-(2) verbatim: "A drinking water supplier must ensure that the
+   ;; drinking water supplied by the supplier complies with the drinking
+   ;; water standards. ... If a supplier's drinking water does not comply
+   ;; with the drinking water standards, the supplier must-- ... notify the
+   ;; Water Services Authority of the non-compliance ... [and] advise
+   ;; affected consumers and drinking water suppliers that drinking water
+   ;; does not comply with the drinking water standards". Act s 137(1)/(3)
+   ;; verbatim: "the Water Services Authority must ensure that, on an annual
+   ;; basis, it prepares a report on ... (c) compliance rates of drinking
+   ;; water suppliers with the drinking water standards ... [and] must
+   ;; ensure that the report is published". Act s 5 verbatim: "Water
+   ;; Services Authority means the Water Services Authority--Taumata Arowai
+   ;; established by section 8 of the Water Services Authority--Taumata
+   ;; Arowai Act 2020" -- confirming the regulator (branded "Taumata Arowai"
+   ;; on its own site) was renamed by the Local Government (Water Services)
+   ;; (Repeals and Amendments) Act 2025 (2025 No 43, in force 27 August
+   ;; 2025) from its original name "Taumata Arowai--the Water Services
+   ;; Regulator Act 2020" (2020 No 52), both forms independently confirmed
+   ;; present in the fetched Act text.
+   "NZL" {:name "New Zealand"
+          :owner-authority "Water Services Authority -- Taumata Arowai, established under the Water Services Authority--Taumata Arowai Act 2020 (renamed 27 August 2025 from Taumata Arowai--the Water Services Regulator Act 2020)"
+          :legal-basis "Water Services Act 2021 (ss 22, 47, 137) / Water Services (Drinking Water Standards for New Zealand) Regulations 2022 (SL 2022/168)"
+          :national-spec "Maximum acceptable values (MAVs) for microbiological, inorganic, organic and radiological determinands in drinking water (e.g. Escherichia coli: less than 1 per 100 mL sample) set under Act s 47 (Regulations 2022 r 4 and Schedule); a supplier must notify the Water Services Authority and advise affected consumers of any non-compliance (Act s 22); the Water Services Authority must publish an annual public report on national drinking-water compliance and safety (Act s 137)"
+          :provenance "https://www.legislation.govt.nz/regulation/public/2022/0168/latest/whole.html"
+          :required-evidence ["Site-intake record"
+                              "Sensor-calibration-provenance certificate"
+                              "Lab-result-chain-of-custody record"
+                              "Public-reporting-source document"]}})
 
 (defn spec-basis
   "The jurisdiction's requirement map, or nil -- nil means NO spec-basis,

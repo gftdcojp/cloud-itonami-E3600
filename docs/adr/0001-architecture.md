@@ -201,9 +201,11 @@ already established for that sibling's own ID field.
 - (+) Two small pre-existing inconsistencies (missing required/
   optional-technologies fields, a stale internal ID field) were
   corrected as part of this promotion.
-- (-) This R0 seeds only 4 jurisdictions (JPN, USA, GBR, DEU) with an
-  official spec-basis, out of ~194 worldwide; `water.facts/coverage`
-  reports this honestly rather than claiming broader coverage.
+- (-) This R0 seeds only 6 jurisdictions (JPN, USA, GBR, DEU, FRA, NZL)
+  with an official spec-basis, out of ~194 worldwide (FRA and NZL
+  added post-promotion; counts here corrected accordingly);
+  `water.facts/coverage` reports this honestly rather than claiming
+  broader coverage.
 - (-) `contaminant-level-out-of-range?` models only a single
   contaminant-level comparison, not real SCADA/sensor-network
   telemetry ingestion or a full hydraulic-modeling engine -- see
