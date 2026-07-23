@@ -143,6 +143,39 @@
           :required-evidence ["Site-intake record"
                               "Sensor-calibration-provenance certificate"
                               "Lab-result-chain-of-custody record"
+                              "Public-reporting-source document"]}
+   ;; IRL citations independently fetched+read directly this session
+   ;; (2026-07-23) from the Irish Statute Book (irishstatutebook.ie,
+   ;; HTTP 200, no bot-detection challenge) and the EPA's own site
+   ;; (epa.ie, HTTP 200, no bot-detection challenge). Confirmed
+   ;; verbatim on epa.ie's own drinking-water page: "The EPA is the
+   ;; drinking water quality regulator for public water supplies,
+   ;; responsible for enforcing the Drinking Water Regulations. The
+   ;; Local Authorities are the drinking water regulators for private
+   ;; water supplies". Confirmed verbatim on the Regulations' own
+   ;; Citation clause (Regulation 1(1)): "These Regulations may be
+   ;; cited as the European Union (Drinking Water) Regulations 2023."
+   ;; Confirmed the Regulations' own Interpretation clause (Regulation
+   ;; 2(1)) defines: "\"EPA\" means the Environmental Protection
+   ;; Agency" -- matching epa.ie's own self-description exactly.
+   ;; Confirmed the Regulations' own General obligations (Regulation
+   ;; 4(1)) verbatim: "a water supplier shall ensure that all water
+   ;; intended for human consumption supplied by them is-- (a)
+   ;; wholesome and clean, (b) does not present a risk to human
+   ;; health, and (c) meets the requirements of these Regulations."
+   ;; HONEST GAP: this iteration did not independently confirm the
+   ;; Regulations' own specific monitoring/public-reporting provision
+   ;; text (Part 4/Schedule 2 "Monitoring") beyond its table-of-
+   ;; contents heading -- the substantive monitoring-programme article
+   ;; text was not read this session.
+   "IRL" {:name "Ireland"
+          :owner-authority "Environmental Protection Agency (EPA) -- public water supplies; Local Authorities -- private supplies (group water schemes, private wells)"
+          :legal-basis "European Union (Drinking Water) Regulations 2023 (S.I. No. 99 of 2023)"
+          :national-spec "Regulation 4(1) (General obligations): a water supplier shall ensure that all water intended for human consumption supplied by them is wholesome and clean, does not present a risk to human health, and meets the requirements of the Regulations; Schedule 2 sets monitoring programmes, parameters and sampling frequencies (substantive monitoring-article text not independently read this session, see namespace docstring)"
+          :provenance "https://www.irishstatutebook.ie/eli/2023/si/99/made/en/print ; https://www.epa.ie/our-services/monitoring--assessment/drinking-water/"
+          :required-evidence ["Site-intake record"
+                              "Sensor-calibration-provenance certificate"
+                              "Lab-result-chain-of-custody record"
                               "Public-reporting-source document"]}})
 
 (defn spec-basis
